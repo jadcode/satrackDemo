@@ -202,6 +202,48 @@ public class SatrackFunctions extends PageObject {
 				assertTrue(String.format("No es posible pulsar el campo porque se presenta el siguiente error: %s",ex), false);
 			}
 		}
+		/**
+		 * Metodo que permite traer la ruta de la apk
+		 * @return devuelve la ruta de la pak
+		 * @author JONY
+		 */
+		public String traerAPK() {			
+			String ruta = "";
+			try {
+				String apkpath="src\\test\\resources\\app\\avianca.apk";
+	        	File app=new File(apkpath);
+	        	logger.info("Ruta del apk: "+app.getAbsolutePath());
+	        	ruta = app.getAbsolutePath();
+			}catch(Exception ex) {
+				assertTrue(String.format("No fue posible encontrar la apk del proyecto,se presenta el siguiente error: %s",ex), false);
+			}			
+        	return ruta;
+		}
+		/**
+		 * Metodo que permite traer las caracteristicas de un equipo
+		 * @return devuelve las caracteristicas del equipo
+		 * @author JONY
+		 */
+		public DesiredCapabilities traerDispositivo() {
+			DesiredCapabilities capabilities = new DesiredCapabilities();
+	        capabilities.setCapability("platformName", "Android");
+	        capabilities.setCapability("deviceName", "Note 10");
+	        capabilities.setCapability("udid", "RF8M8237ZEA");                
+	        capabilities.setCapability("noReset", true);
+	        capabilities.setCapability("app", traerAPK());  
+	        return capabilities;
+		}
+		/**
+		 * Metodo que permite traer el dia actual
+		 * @return devuelve el dia actual
+		 * @author JONY
+		 */
+		public String traerDiaActual() {
+			Calendar calendario = Calendar.getInstance();
+			String dia = Integer.toString(calendario.get(Calendar.DATE));
+			logger.info("Dia actual :"+dia);
+			return dia;
+		}
 }	
 	
 	
