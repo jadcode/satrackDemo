@@ -2,33 +2,44 @@ package satrack.com.avianca.steps;
 
 import net.thucydides.core.annotations.Step;
 import satrack.com.avianca.pageobject.AviancaPage;
-import satrack.com.compras.pageobject.ComprasPage;
-
 	
 public class AviancaSteps {
 
 	AviancaPage aviancaPage;
 			
 	@Step
-	public void cargarAPPAviancaStep() {
-		aviancaPage.ingresoSitioLibrosDisponibles();
-	}
-	
-	/*
-	@Step
-	public void diligenciarCantidadLibrosYTituloStep(String cantidadLibros, String tituloLibro) {		
-		compraPage.diligenciarCantidadLibrosYTitulo(cantidadLibros,tituloLibro);
+	public void cargarAPPAviancaStep(String dispositivo) {
+		aviancaPage.ingresoSitioLibrosDisponibles(dispositivo);
 	}
 	
 	@Step
-	public void pulsarAdicionarLibroStep() {
-		compraPage.pulsarAdicionarLibro();
+	public void buscarVueloSoloIdaStep() {
+		aviancaPage.buscarVueloSoloIda();
 	}
-			
+	
 	@Step
-	public void verificarSumaCompraStep() {
-		compraPage.verificarSumaCompra();
+	public void seleccionarPrimerOrigenStep() {
+		aviancaPage.seleccionarPrimerOrigen();
 	}
-	*/
+	
+	@Step
+	public void seleccionarPrimerDestinoStep() {
+		aviancaPage.seleccionarPrimerDestino();
+	}
+	
+	@Step
+	public void seleccionarFechaActualVueloStep() {
+		aviancaPage.seleccionarFechaActualVuelo();
+	}
+	
+	@Step
+	public void buscarVueloStep() {
+		aviancaPage.buscarVuelo();
+	}
+	
+	@Step
+	public void validarPaginaBusquedaVuelosStep() {
+		aviancaPage.validarPaginaBusquedaVuelos();
+	}
 }
 

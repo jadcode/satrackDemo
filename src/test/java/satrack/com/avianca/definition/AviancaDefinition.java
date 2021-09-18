@@ -12,26 +12,38 @@ public class AviancaDefinition {
 	@Steps
 	AviancaSteps aviancaSteps;
 	
-	@Given("^Ingresa a la app de avianca$") 
-	public void cargarAPPAvianca(){
-		aviancaSteps.cargarAPPAviancaStep(); 
+	@Given("^Ingresa a la app de avianca en el \"([^\"]*)\"$") 
+	public void cargarAPPAvianca(String dispositivo){
+		aviancaSteps.cargarAPPAviancaStep(dispositivo); 
 	}	
 		
-	/*
-	@When("^Ingresa la \"([^\"]*)\" del \"([^\"]*)\"$")
-	public void diligenciarCantidadLibrosYTitulo(String cantidadLibros, String tituloLibro){
-		compraSteps.diligenciarCantidadLibrosYTituloStep(cantidadLibros,tituloLibro);
-	}	
-		
-	@And("^Pulsa el botón adicionar$") 
-	public void pulsarAdicionarLibro(){
-		compraSteps.pulsarAdicionarLibroStep(); 
-	}			
-	
-	@Then("^Verifica que la suma total a pagar sea correcta$") 
-	public void verificarSumaCompra(){
-		compraSteps.verificarSumaCompraStep(); 
+	@When("^Busca un vuelo de solo ida$") 
+	public void buscarVueloSoloIda(){
+		aviancaSteps.buscarVueloSoloIdaStep(); 
 	}
-*/
 	
+	@And("^Selecciona el primer aeropuerto de origen$") 
+	public void seleccionarPrimerOrigen(){
+		aviancaSteps.seleccionarPrimerOrigenStep(); 
+	}	
+	
+	@And("^Selecciona el primer aeropuerto de destino$") 
+	public void seleccionarPrimerDestino(){
+		aviancaSteps.seleccionarPrimerDestinoStep(); 
+	}	
+	
+	@And("^Selecciona la fecha actual para el vuelo$") 
+	public void seleccionarFechaActualVuelo(){
+		aviancaSteps.seleccionarFechaActualVueloStep(); 
+	}	
+	
+	@And("^Busca un vuelo$") 
+	public void buscarVuelo(){
+		aviancaSteps.buscarVueloStep(); 
+	}
+	
+	@Then("^Valida que se muestra la pagina de buscar vuelo$") 
+	public void validarPaginaBusquedaVuelos(){
+		aviancaSteps.validarPaginaBusquedaVuelosStep(); 
+	}
 }

@@ -224,14 +224,16 @@ public class SatrackFunctions extends PageObject {
 		 * @return devuelve las caracteristicas del equipo
 		 * @author JONY
 		 */
-		public DesiredCapabilities traerDispositivo() {
+		public DesiredCapabilities traerDispositivo(String dispositivo) {
 			DesiredCapabilities capabilities = new DesiredCapabilities();
-	        capabilities.setCapability("platformName", "Android");
-	        capabilities.setCapability("deviceName", "Note 10");
-	        capabilities.setCapability("udid", "RF8M8237ZEA");                
-	        capabilities.setCapability("noReset", true);
-	        capabilities.setCapability("app", traerAPK());  
-	        return capabilities;
+			if(dispositivo.contains("SAMSUNG")) {				
+		        capabilities.setCapability("platformName", "Android");
+		        capabilities.setCapability("deviceName", "Note 10");
+		        capabilities.setCapability("udid", "RF8M8237ZEA");                
+		        capabilities.setCapability("noReset", true);
+		        capabilities.setCapability("app", traerAPK());  		       
+			}
+			 return capabilities;
 		}
 		/**
 		 * Metodo que permite traer el dia actual
@@ -244,6 +246,7 @@ public class SatrackFunctions extends PageObject {
 			logger.info("Dia actual :"+dia);
 			return dia;
 		}
+		
 }	
 	
 	

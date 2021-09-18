@@ -5,11 +5,14 @@ Feature: Vuelos
 
   @Avianca
   Scenario Outline: Validar tickets
-    Given Ingresa a la app de avianca
-    #When Escribe el <Usuario> y la <Clave>
-    #And Pulsa el botón Login
-    #Then Valida inicio de sesion exitoso
+    Given Ingresa a la app de avianca en el <Dispositivo>
+    When Busca un vuelo de solo ida
+    And  Selecciona el primer aeropuerto de origen
+    And  Selecciona el primer aeropuerto de destino
+    And  Selecciona la fecha actual para el vuelo
+    And  Busca un vuelo
+    Then Valida que se muestra la pagina de buscar vuelo
 
     Examples: 
-      | Usuario | Clave    |
-      | "test"  | "secret" |
+      | Dispositivo |
+      | "SAMSUNG"  |

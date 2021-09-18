@@ -22,56 +22,62 @@ public class AviancaPage extends PageObject{
 	String botonDestino = "areamovil.aviancataca:id/destinationInput";
 	String primerDestino = "//*[@resource-id='areamovil.aviancataca:id/itemIcon' and @index='1']";
 	String campoFechaVuelo = "areamovil.aviancataca:id/calendarField";
+	String tituloPaginaEsperada = "Busca tu vuelo";
 		
 	@SuppressWarnings("rawtypes")
-	public void ingresoSitioLibrosDisponibles() {
+	public void ingresoSitioLibrosDisponibles(String dispositivo) {
 		logger.info("Comienza el paso: Ingresa al sitio de Sahi Tests");		
         try {        	
-        	driver = new AndroidDriver(new URL("http://127.0.0.1:4723/wd/hub"), funcionesGenerales.traerDispositivo());        	
+        	driver = new AndroidDriver(new URL("http://127.0.0.1:4723/wd/hub"), funcionesGenerales.traerDispositivo(dispositivo));        	
         }catch(Exception ex) {
         	logger.info("Existe un error al conectar con appium server: "+ex);
         }        
 		logger.info("Termina el paso: Ingresa al sitio de Sahi Tests");
-		saltarOpciones();
-		driver.quit();
 	}
 	
+	public void buscarVueloSoloIda() {
+		pulsarBotonID(botonBuscar);
+		pulsarBotonID(botonSoloIda);
+	}
 	
-	public void saltarOpciones() {
-		logger.info("Proceso a saltar opciones de inicio");
-		try {		
-			pulsarBotonID(botonBuscar);
-			pulsarBotonID(botonSoloIda);
-			pulsarBotonID(botonOrigen);
-			pulsarBotonXPATH(primerOrigen);		
-			pulsarBotonID(botonDestino);
-			pulsarBotonXPATH(primerDestino);
-			pulsarBotonID(campoFechaVuelo);			
-			pulsarBotonXPATH("//*[@resource-id='areamovil.aviancataca:id/day_number_text' and @text='"+funcionesGenerales.traerDiaActual()+"']");
-			pulsarBotonID("areamovil.aviancataca:id/save_calendar_button");			
-			pulsarBotonID("areamovil.aviancataca:id/search_flights_button");			
-			esperarControlVisual("areamovil.aviancataca:id/webview_title");
-			String resultado = driver.findElement(By.id("areamovil.aviancataca:id/webview_title")).getText();
-			System.out.println(resultado);
-			while(resultado.contains("Aguarde un instante")) {
-				logger.info("Aun se encuentra cargando");
-				waitFor(1).seconds();
-				resultado = driver.findElement(By.id("areamovil.aviancataca:id/webview_title")).getText();				
-			}
-			System.out.println(resultado);
-			
-			
-			logger.info("Logrado");
-									
-			
-		}catch(Exception ex) {
-			logger.info("Error: "+ex);
+	public void seleccionarPrimerOrigen() {
+		pulsarBotonID(botonOrigen);
+		pulsarBotonXPATH(primerOrigen);
+	}
+	
+	public void seleccionarPrimerDestino() {
+		pulsarBotonID(botonDestino);
+		pulsarBotonXPATH(primerDestino);
+	}
+	
+	public void seleccionarFechaActualVuelo() {
+		pulsarBotonID(campoFechaVuelo);			
+		pulsarBotonXPATH("//*[@resource-id='areamovil.aviancataca:id/day_number_text' and @text='"+funcionesGenerales.traerDiaActual()+"']");
+		pulsarBotonID("areamovil.aviancataca:id/save_calendar_button");	
+	}
+	
+	public void buscarVuelo() {
+		pulsarBotonID("areamovil.aviancataca:id/search_flights_button");
+	}
+	
+	public void validarPaginaBusquedaVuelos() {
+		esperarControlVisual("areamovil.aviancataca:id/webview_title");
+		String resultado = driver.findElement(By.id("areamovil.aviancataca:id/webview_title")).getText();
+		logger.info("Pantalla en la que estoy: "+resultado);
+		while(resultado.contains("Aguarde un instante")) {
+			logger.info("Aun se encuentra cargando");
+			waitFor(1).seconds();
+			resultado = driver.findElement(By.id("areamovil.aviancataca:id/webview_title")).getText();				
 		}
-	
-		logger.info("Pulse el boton");
+		logger.info("Me encuentro en la pagina: "+resultado);
+		if(!resultado.contains(tituloPaginaEsperada)) {
+			driver.quit();
+			assertTrue(String.format("No se observa el titulo esperado: %s , el aplicativo retorna el mensaje: %s",tituloPaginaEsperada,resultado), false);
+		}		
+		driver.quit();
+		logger.info("Logrado");
 	}
-	
-	
+		
 	public void pulsarBotonID(String selector) {
 		boolean resultado = false;
 		while(!resultado) {
@@ -94,7 +100,6 @@ public class AviancaPage extends PageObject{
 				driver.findElement(By.xpath(selector)).click();	
 				logger.info("Pulse correctamente el selector: "+selector);
 				resultado = true;
-				//waitFor(2).seconds();
 				break;
 			}catch(Exception ex) {
 				logger.info("Aun no se encuentra disponible el selector: "+selector);
@@ -110,7 +115,6 @@ public class AviancaPage extends PageObject{
 				driver.findElement(By.id(selector)).isDisplayed();	
 				logger.info("Se visualiza correctamente el selector: "+selector);
 				resultado = true;
-				//waitFor(2).seconds();
 				break;
 			}catch(Exception ex) {
 				logger.info("Aun no se encuentra disponible el selector: "+selector);
@@ -118,37 +122,4 @@ public class AviancaPage extends PageObject{
 			
 		}
 	}
-		
-	/*
-	public void seleccionarOpcionPruebaSitio(String option) {
-		logger.info(String.format("Comienza el paso: Selecciona la opción %s",option));		
-		funcionesGenerales.pulsarBoton("//a[text()='"+option+"']");
-		logger.info(String.format("Termina el paso: Selecciona la opción %s",option));
-	}
-	
-	public void seleccionarErrorValidar(String error) {
-		logger.info("Comienza el paso: Selecciona el error a validar "+error);
-		funcionesGenerales.pulsarBoton("//a[text()='"+error+"']");
-		codigoErrorEsperado = Integer.parseInt(error.replaceAll("[^\\d]", ""));
-		logger.info("Termina el paso: Selecciona el error a validar "+error);
-	}
-	
-	public void verificarErrorEsperado() {
-		logger.info("Comienza el paso: Valida que muestra el error esperado");		
-		RestAssured.baseURI = "http://sahitest.com/demo/";
-		RequestSpecification httpRequest = RestAssured.given();
-		Response response = httpRequest.get();
-		int statusCode = response.getStatusCode();
-		logger.info("El codigo de respuesta del sitio es: "+statusCode);
-		if(statusCode != codigoErrorEsperado) {
-			logger.info(String.format("El sitio responde un codigo de error distinto al esperado, el codigo esperado es %s y el retornado es %s, se procede a validar visualmente",codigoErrorEsperado,statusCode));
-		}				
-		if(!lblError.isPresent()) {
-			assertTrue("No se observa el error esperado", false);
-		}else {
-			logger.info("Se observa el error esperado a nivel visual");
-		}		
-		logger.info("Termina el paso: Valida que muestra el error esperado");
-	}	
-	*/
 }
